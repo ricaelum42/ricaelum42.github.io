@@ -1,4 +1,4 @@
-<!-- Code from d3-graph-gallery.com -->
+<!-- Reference: d3-graph-gallery.com -->
 <!DOCTYPE html>
 <meta charset="utf-8">
 
@@ -20,7 +20,7 @@
     </style>
 </head>
 
-<h1> Historical COVID-19 Cases and Data by States with Data up to 12/06/2021 </h1>
+<h1> New York Times Historical COVID-19 Cases and Deaths by States with Data up to 12/06/2021 </h1>
 
 
 <!-- Load d3.js -->
@@ -417,6 +417,7 @@ function update(selectedVar) {
     	   .text("Total Cases")
     }
 
+
     // variable u: map data to existing bars
     var u = svg.selectAll("rect")
       		   .data(dataFilter)
@@ -433,14 +434,27 @@ function update(selectedVar) {
       .attr("width", x.bandwidth())
       .attr("height", function(d) { return height - y(+d[selectedVar]); })
       .attr("fill", "#69b3a2")
-      .on("mousemove", function(d){
-            tooltip
-              .style("left", d3.event.pageX - 50 + "px")
-              .style("top", d3.event.pageY - 70 + "px")
-              .style("display", "inline-block")
-              .text((d.state) + "<br>" + (+d[selectedVar]));
-       })
-      .on("mouseout", function(d){ tooltip.style("display", "none");});
+
+    var annotations = [
+ 	 {
+   	 note: { label: "California has the highest number of total cases and deaths." },
+   	 x: 75,
+   	 y: 0,
+   	 dy: 137,
+   	 dx: 162,
+	 type:d3.annotationCalloutElbow,
+	 subject: { radius: 50, radiusPadding: 10 },
+  		},
+	];
+
+	// Add annotation to the chart
+	var makeAnnotations = d3.annotation()
+ 							  .annotations(annotations)
+	svg.append('g')
+	   .attr("class","myAnnotation")
+  	   .call(makeAnnotations)
+
+
   })
 
 }
@@ -637,3 +651,10 @@ d3.csv("https://raw.githubusercontent.com/ricaelum42/Visualization-Project/main/
 
 
 </script>
+
+
+
+<p>
+	Data Source: https://github.com/nytimes/covid-19-data </br>
+	Reference: https://www.d3-graph-gallery.com/
+</p>
